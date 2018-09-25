@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>AS Command Center</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+
+    <!-- Index CSS -->
+    <link rel="stylesheet" href="./index.css" media="screen">
+
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+
+    <!-- JQuery JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+        crossorigin=""></script>
+
+    <!-- Bing Maps JS  -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"></script>
+    <script src="leaflet-bing-layer.min.js"></script>
+
+    <!-- QR Code JS -->
+
+
+    <!-- Insert this line below script imports -->
+    <script>if (window.module) { module = window.module; }</script>
+
+</head>
+
+<body>
+
+    <!-- Top navigation bar
+    <div id="topbar">
+        <span style="float:left">
+            <h1>The Command Center</h1>
+        </span>
+        <span style="float:right">
+            <h1>Rocket Interface</h1>
+        </span>
+
+        <a href="http://localhost:3000/">
+            <img id="as-logo" src="../assets/logo-gray.png">
+        </a>
+    </div>
+
+    <div style="height: 20px;"></div> -->
+
+    <div style="width: 100%; margin-left: auto; margin-right: auto">
+
+        <div id="left-panel">
+            <!-- A container for the Cesium Viewer to live in. -->
+            <div id="map-wrapper">
+                <div id="leaflet-map"></div>
+                <div id="button-wrapper">
+                    <input type="button" id="map-center-button" value="Center" class="btnStyle"/>
+                 </div> 
+            </div>
+            <!-- <button id="map-center-button">Center</button> -->
+        </div>
+
+        <div id="right-panel">
+
+            
+
+            <!-- Terminal -->
+            <div id="messages-container">
+                <ul id="messages"></ul>
+            </div>
+            <form id="cmd_line" action="">
+                <input id="m" autocomplete="off" autofocus="autofocus" />
+            </form>
+
+
+            <div id="gps-panel">
+                <h2 class="data-title">GPS Data</h2>
+                <div id="usb-container"></div>
+                <div class="float-clear"></div>
+                <hr>
+                <p>
+                    <strong>Latitude:</strong>
+                    <span id="gps-lat">---</span>
+                </p>
+                <p>
+                    <strong>Longitude:</strong>
+                    <span id="gps-lon">---</span>
+                </p>
+                <p>
+                    <strong>Altitude:</strong>
+                    <span id="gps-alt">---</span>
+                </p>
+                <p>
+                    <strong>Time:</strong>
+                    <span id="gps-time">---</span>
+                </p>
+                <p>
+                    <strong>Satellites:</strong>
+                    <span id="gps-sat">---</span>
+                </p>
+                <p>
+                    <strong>Precision:</strong>
+                    <span id="gps-prec">---</span>
+                </p>
+                <p id="gps-frames-container">
+                    <strong>Recorded Frames:</strong>
+                    <span id="gps-frames">0</span>
+                </p>
+                <canvas id="qr-code"></canvas>
+                <button id="copy-button">Copy</button>
+                <button id="record-button">Record</button>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+
+<!-- Our application code. -->
+<script src="App.js"></script>
+<script src="UsbSelectMenu.js"></script>
+
+</html>

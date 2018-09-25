@@ -1,0 +1,28 @@
+{
+  "name": "ucr-aerospace-app",
+  "version": "1.0.0",
+  "description": "",
+  "license": "Apache-2.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . as-command-center-app --asar=true --overwrite --platform=win32 --arch=x64  --prune=true --out=../release-builds",
+    "package-linux": "electron-packager . as-command-center-app --overwrite --platform=linux --arch=x64  --prune=true --out=release-builds"
+  },
+  "dependencies": {
+    "electron": "^2.0.8",
+    "node-hid": "^0.7.3",
+    "qrcode": "^1.2.2",
+    "serialport": "^7.0.2",
+    "usb-detection": "^3.2.0"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "devDependencies": {
+    "electron-packager": "^12.1.1",
+    "electron-rebuild": "^1.8.2"
+  }
+}
