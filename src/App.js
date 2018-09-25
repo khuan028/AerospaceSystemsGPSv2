@@ -9,7 +9,7 @@
     var BING_KEY =
         "At6YYQ1y86YztdKIh9jqtu4YnAxPXF5UkDssVDczmxerEtUM59lYVtOyWeCXzrWL";
 
-    var mymap = L.map("leaflet-map").setView([0, 0], 1);
+    var mymap = L.map("map").setView([0, 0], 1);
 
     var bingLayer = L.tileLayer
         .bing({
@@ -282,7 +282,7 @@
                     }
                     else {
                         console.log("QR code success!");
-                        document.getElementById("qr-code").style.display = "block";
+                        document.getElementById("qr-code").style.maxWidth = "200px";
                     }
                 }
             );

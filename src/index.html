@@ -35,51 +35,19 @@
 </head>
 
 <body>
-
-    <!-- Top navigation bar
-    <div id="topbar">
-        <span style="float:left">
-            <h1>The Command Center</h1>
-        </span>
-        <span style="float:right">
-            <h1>Rocket Interface</h1>
-        </span>
-
-        <a href="http://localhost:3000/">
-            <img id="as-logo" src="../assets/logo-gray.png">
-        </a>
-    </div>
-
-    <div style="height: 20px;"></div> -->
-
-    <div style="width: 100%; margin-left: auto; margin-right: auto">
-
+    <div id="grid">
         <div id="left-panel">
-            <!-- A container for the Cesium Viewer to live in. -->
             <div id="map-wrapper">
-                <div id="leaflet-map"></div>
+                <div id="map"></div>
                 <div id="button-wrapper">
-                    <input type="button" id="map-center-button" value="Center" class="btnStyle"/>
-                 </div> 
+                    <input type="button" id="map-center-button" value="Center" class="mapBtn" />
+                </div>
             </div>
-            <!-- <button id="map-center-button">Center</button> -->
         </div>
 
         <div id="right-panel">
-
-            
-
-            <!-- Terminal -->
-            <div id="messages-container">
-                <ul id="messages"></ul>
-            </div>
-            <form id="cmd_line" action="">
-                <input id="m" autocomplete="off" autofocus="autofocus" />
-            </form>
-
-
             <div id="gps-panel">
-                <h2 class="data-title">GPS Data</h2>
+                <h2 class="float-left">GPS Data</h2>
                 <div id="usb-container"></div>
                 <div class="float-clear"></div>
                 <hr>
@@ -111,19 +79,19 @@
                     <strong>Recorded Frames:</strong>
                     <span id="gps-frames">0</span>
                 </p>
-                <canvas id="qr-code"></canvas>
-                <button id="copy-button">Copy</button>
-                <button id="record-button">Record</button>
 
+                <div id="copy-record-button-container">
+                    <button id="copy-button">Copy</button>
+                    <button id="record-button">Record</button>
+                </div>
+
+                <canvas id="qr-code"></canvas>
             </div>
         </div>
-
-
 
     </div>
 </body>
 
-<!-- Our application code. -->
 <script src="App.js"></script>
 <script src="UsbSelectMenu.js"></script>
 
