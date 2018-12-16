@@ -41,6 +41,7 @@ select, option {
     color: white;
     border: none;
     padding: 5px;
+    transition: background-color 0.07s ease-out;
 }
 
 select:hover {
@@ -75,18 +76,18 @@ select:hover {
 
 #button-wrapper {
     position: absolute;
-    bottom: 10px;
-    width: 100%;
+    top: 10px;
     z-index: 9999;
     padding: 10px;
+    right: 10px;
 }
 
 .mapBtn {
-    border-radius: 15px;
+    border-radius: 17px;
     background-color: white;
     border: 1px solid gray;
-    color: black;
-    padding: 4px;
+    color: rgb(44, 44, 44);
+    padding: 10px;
     margin: auto;
     width: 100px;
 }
@@ -162,48 +163,28 @@ select:hover {
     max-width: 0;
     margin: auto;
     margin-top: 15px;
-
     transition: max-width 0.3s ease-out;
 }
 
 /***************************************
 *  
-*   INDEX.COPY-BUTTON
+*   INDEX.COPY-BUTTON, INDEX.RECORD-BUTTON
 *
 ****************************************/
 
-#copy-button {
-    background: #3b3b3b;
+#copy-button, #record-button {
+    background-color: #3b3b3b;
     border: none;
     color: white;
     padding: 10px;
     margin: 3px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.07s ease-out;
 }
 
-#copy-button:hover {
-    background: #008bb6;
-}
-
-/***************************************
-*  
-*   INDEX.RECORD-BUTTON
-*
-****************************************/
-
-#record-button {
-    background: #3b3b3b;
-    border: none;
-    color: white;
-    padding: 10px;
-    margin: 3px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-#record-button:hover {
-    background: #008bb6;
+#copy-button:hover, #record-button:hover {
+    background-color: #008bb6;
 }
 
 /***************************************
@@ -230,13 +211,11 @@ select:hover {
     *   INDEX.RESPONSIVE.GRID
     *
     ****************************************/
-
     #grid {
         grid-template-columns: none;
         grid-template-rows: 1fr auto;
         height: 95vh;
     }
-
     /***************************************
     *  
     *   INDEX.RESPONSIVE.MAP

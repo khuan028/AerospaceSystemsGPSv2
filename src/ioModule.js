@@ -36,7 +36,7 @@ class ioModule extends EventEmitter {
 
     successfulConnection(port) {
         this.parser = port.pipe(
-            new SerialPort.parsers.Delimiter({ delimiter: "\r" })
+            new SerialPort.parsers.Delimiter({ delimiter: "\r\n" })
         );
 
         // If we were already connected to a device, close it

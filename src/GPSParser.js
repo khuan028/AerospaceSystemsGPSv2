@@ -1,8 +1,18 @@
-const GPSParser = {
-    parse: function(data, start_time) {
+class GPSParser {
+
+    parse(data, start_time) {
+
         let tokens = data.split(" ");
 
-        if (!(tokens.length >= 7 && tokens[0] == "GPS")) {
+        if (tokens.length < 7) {
+            console.error(
+                "Could not parse because data has less than 7 tokens"
+            );
+            return null;
+        }
+
+        if (tokens[0] != "GPS") {
+            console.error("Could not parse because first token is not 'GPS'");
             return null;
         }
 
@@ -25,10 +35,14 @@ const GPSParser = {
         };
 
         //Prevent further manipulation of gps information
-        Object.freeze(gpsDataObject);
+        //Object.freeze(gpsDataObject);
 
         return gpsDataObject;
     }
-};
+
+    bumble() {
+        console.log("bee");
+    }
+}
 
 module.exports = GPSParser;

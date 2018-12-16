@@ -1,17 +1,18 @@
 (function() {
     const { ipcRenderer } = require("electron");
-    const GPSParser = require("./GPSParser");
+    const GPSParser = new (require("./GPSParser"))();
     const QRCode = require("qrcode");
+    const SaveSystem = new (require("./SaveSystem"))();
 
     //////////////////////////////////////////////////////////////////////////
     // Leaflet code
     //////////////////////////////////////////////////////////////////////////
-    var BING_KEY =
+    let BING_KEY =
         "At6YYQ1y86YztdKIh9jqtu4YnAxPXF5UkDssVDczmxerEtUM59lYVtOyWeCXzrWL";
 
-    var mymap = L.map("map").setView([0, 0], 1);
+    let mymap = L.map("map").setView([0, 0], 1);
 
-    var bingLayer = L.tileLayer
+    let bingLayer = L.tileLayer
         .bing({
             bingMapsKey: BING_KEY,
             imagerySet: "AerialWithLabels"
@@ -60,23 +61,6 @@
         );
     }
 
-    // function create_GPS_info(tokens) {
-    //     var gps_in = {
-    //         latitude: parseFloat(tokens[1]),
-    //         longitude: parseFloat(tokens[2]),
-    //         altitude: parseFloat(tokens[3]),
-    //         time: tokens[4],
-    //         timer: new Date() / 1000 - start_time,
-    //         satellites: parseFloat(tokens[5]),
-    //         precision: parseFloat(tokens[6])
-    //     };
-
-    //     //Prevent further manipulation of gps information
-    //     Object.freeze(gps_in);
-
-    //     return gps_in;
-    // }
-
     function display_GPS_info(gin) {
         $("#gps-lat").text(gin.latitude.toFixed(6) + "°");
         $("#gps-lon").text(gin.longitude.toFixed(6) + "°");
@@ -86,130 +70,24 @@
         $("#gps-prec").text(gin.precision);
     }
 
-    function downloadFile(filename, options, contents) {
-        let element = document.createElement("a");
-        element.setAttribute("href", options + encodeURIComponent(contents));
-        element.setAttribute("download", filename);
-
-        element.style.display = "none";
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
-    function downloadCSV(filename, text) {
-        downloadFile(filename, "data:text/csv;charset=utf-8,", text);
-    }
-
-    function downloadKML(filename, text) {
-        downloadFile(filename, "data:text/kml;charset=utf-8,", text);
-    }
-
     function saveRecording() {
-        //Define variables
-        let outArr = [];
-        let outArr2 = [];
-        let outStr = "";
-        let outStr2 = "";
-        let inital_view = "";
-
-        //Define constants
-        const template_piece1 = `<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-<Style id="yellowPoly">
-<LineStyle>
-<color>7f00ffff</color>
-<width>4</width>
-</LineStyle>
-<PolyStyle>
-<color>7f00ff00</color>
-</PolyStyle>
-</Style>
-<Placemark><styleUrl>#yellowPoly</styleUrl>
-<LookAt>`;
-
-        const template_piece2 = `   <heading>-0.23</heading>
-<tilt>47.81</tilt>
-<range>300</range>
-<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
-</LookAt>
-<LineString>
-<extrude>1</extrude>
-<tesselate>1</tesselate>
-<altitudeMode>absolute</altitudeMode>
-<coordinates>`;
-
-        const template_piece3 = `</coordinates>
-</LineString></Placemark>
-
-</Document></kml>`;
-
-        //Convert GPS messages into CSV file
-        outArr.push(
-            "Latitude,Longitude,Altitude,Time(GMT),Time(seconds since recording started),Satellites,Precision"
-        );
-        for (var i = 0; i < recorded_data.length; i++) {
-            var gin = recorded_data[i];
-            outArr.push(
-                "" +
-                    gin.latitude +
-                    "," +
-                    gin.longitude +
-                    "," +
-                    gin.altitude +
-                    "," +
-                    gin.time +
-                    "," +
-                    gin.timer +
-                    "," +
-                    gin.satellites +
-                    "," +
-                    gin.precision
-            );
-        }
-        outStr = outArr.join("\n");
-        downloadCSV(
+        //Save GPS data into CSV file
+        SaveSystem.downloadCSV(
             "GPS Recording " + start_date.toUTCString() + ".csv",
-            outStr
+            SaveSystem.convertDataToCSV(recorded_data)
         );
 
-        //Convert GPS messages into KML file
-        for (var i = 0; i < recorded_data.length; i++) {
-            var gin = recorded_data[i];
-            outArr2.push(
-                "" + gin.longitude + "," + gin.latitude + "," + gin.altitude
-            );
-        }
-        if (recorded_data.length > 0) {
-            inital_view =
-                "<longitude>" +
-                recorded_data[0].longitude +
-                "</longitude>" +
-                "<latitude>" +
-                recorded_data[0].latitude +
-                "</latitude>" +
-                "<altitude>" +
-                recorded_data[0].altitude +
-                "</altitude>";
-        }
-        outStr2 =
-            template_piece1 +
-            inital_view +
-            template_piece2 +
-            outArr2.join("\n") +
-            template_piece3;
-        downloadKML(
+        //Save GPS data to KML file
+        SaveSystem.downloadKML(
             "GPS Recording " + start_date.toUTCString() + ".kml",
-            outStr2
+            SaveSystem.convertDataToKML(recorded_data)
         );
     }
 
     ipcRenderer.on("xbee:receive", (e, data) => {
         console.log("Main window received ... " + data);
 
+        GPSParser.bumble();
         let gpsDataObject = GPSParser.parse(data, start_time);
 
         if (gpsDataObject == null) {
@@ -235,7 +113,7 @@
     });
 
     $("form").submit(() => {
-        var msg = $("#m").val();
+        let msg = $("#m").val();
         // socket.emit('XBeeWrite', msg);
         appendMsg("outgoingMsg", msg);
         $("#m").val("");
@@ -245,11 +123,11 @@
 
     $("#map-center-button").click(() => {
         if (gps_info != null) {
-            setView(L.latLng(gps_info.latitude, gps_info.longitude), 14);
+            setView(L.latLng(gps_info.latitude, gps_info.longitude), 15);
         } else {
             let lat = (Math.random() - 0.5) * 180;
             let lon = (Math.random() - 0.5) * 360;
-            setView(L.latLng(lat, lon), 14);
+            setView(L.latLng(lat, lon), 15);
         }
     });
 
@@ -263,9 +141,9 @@
     };
 
     $("#copy-button").click(() => {
-        if (gps_info != null) {
-            console.log("Yea");
-
+        if (gps_info == null) {
+            console.log("There is no data to copy.");
+        } else {
             // Copy coordinates to clipboard
             copyToClipboard(gps_info.latitude + ", " + gps_info.longitude);
 
@@ -279,10 +157,10 @@
                 function(error) {
                     if (error) {
                         console.error(error);
-                    }
-                    else {
+                    } else {
                         console.log("QR code success!");
-                        document.getElementById("qr-code").style.maxWidth = "200px";
+                        document.getElementById("qr-code").style.maxWidth =
+                            "200px";
                     }
                 }
             );
@@ -294,13 +172,17 @@
             recording = false;
             $("#gps-frames-container").css("color", "#646464");
             $("#record-button").text("Record");
-            saveRecording();
+            if (recorded_data.length > 0) {
+                saveRecording();
+            } else {
+                console.log("There is no recorded data. Not saving.");
+            }
         } else {
             recording = true;
             recorded_data.length = 0;
             start_time = new Date() / 1000;
             $("#gps-frames").text(0);
-            $("#gps-frames-container").css("color", "red");
+            $("#gps-frames-container").css("color", "#42c2f4");
             $("#record-button").text("Stop Recording");
         }
     });

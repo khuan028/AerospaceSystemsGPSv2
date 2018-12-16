@@ -1,0 +1,1 @@
+Remember to run electron-rebuild 
